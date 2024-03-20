@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM Template for apigw-lambda
+Globals:
+  Function:
+    Timeout: 30
+Resources:
+  PythonTestDemo:
+    Type: AWS::Serverless::Function
+    Properties:
+      Tracing: Active
+      Policies:
+      - AWSXrayWriteOnlyAccess
+      - Version: '2012-10-17'
+        Statement:
+        - Effect: Allow
+          Action:
+          - s3:ListAllMyBuckets
+          Resource: arn:aws:s3:::*
+      CodeUri: PythonTestDemo
+      Handler: app.lambda_handler
+      Runtime: python3.9
+      Architectures:
+      - x86_64
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      SamResourceId: PythonTestDemo
+Outputs:
+  HelloWorldApi:
+    Description: API Gateway endpoint URL for Prod stage for Hello World function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/hello/
+  PythonTestDemo:
+    Description: Hello World Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - PythonTestDemo
+      - Arn
+  PythonTestDemoIamRole:
+    Description: Implicit IAM Role created for Hello World function
+    Value:
+      Fn::GetAtt:
+      - PythonTestDemoRole
+      - Arn

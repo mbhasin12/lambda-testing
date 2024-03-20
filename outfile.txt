@@ -1,0 +1,1 @@
+{"statusCode": 200, "body": "amplify-amplifye5ed3b60caad4-staging-180357-deployment|aws-sam-cli-managed-default-samclisourcebucket-dujhraokbrrt|test-bucket-class"}
